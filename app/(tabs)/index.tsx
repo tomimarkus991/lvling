@@ -2,8 +2,8 @@ import { Text, View } from "react-native";
 
 export default function TabOneScreen() {
   return (
-    <View className="flex items-center justify-center">
-      <Text className="text-lg font-bold">tab one</Text>
+    <View className="items-center justify-center flex-1 bg-background">
+      <Text className="text-lg font-bold text-text">tab one</Text>
     </View>
   );
 }
