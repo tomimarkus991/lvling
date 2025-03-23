@@ -24,6 +24,7 @@ import { and, gte, lte } from "drizzle-orm";
 import { SelectEvent } from "../../src/db/types";
 import { CalendarEvent } from "../../src/components/CalendarEvent";
 import { getMaxNumberOfEventsForWeekDay } from "../../src/utils/utils";
+import { P } from "../../src/components/P";
 
 export default function TabOneScreen() {
   const currentDate = new Date();
@@ -82,7 +83,7 @@ export default function TabOneScreen() {
 
                   return (
                     <View key={day.toISOString()} className="flex-1 mx-1">
-                      <Text
+                      <P
                         className={clsx(
                           "text-center mb-1",
                           isToday(day)
@@ -91,7 +92,7 @@ export default function TabOneScreen() {
                         )}
                       >
                         {formatDate(day, "dd")}
-                      </Text>
+                      </P>
                       {currentDayEvents.map(event => {
                         return <CalendarEvent key={event.id} {...event} />;
                       })}

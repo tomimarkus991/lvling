@@ -25,7 +25,28 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "Rubik-Black.ttf",
+            "Rubik-BlackItalic.ttf",
+            "Rubik-Bold.ttf",
+            "Rubik-BoldItalic.ttf",
+            "Rubik-ExtraBold.ttf",
+            "Rubik-ExtraBoldItalic.ttf",
+            "Rubik-Italic.ttf",
+            "Rubik-Light.ttf",
+            "Rubik-LightItalic.ttf",
+            "Rubik-Medium.ttf",
+            "Rubik-MediumItalic.ttf",
+            "Rubik-Regular.ttf",
+            "Rubik-SemiBold.ttf",
+            "Rubik-SemiBoldItalic.ttf"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

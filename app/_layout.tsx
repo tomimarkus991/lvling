@@ -11,7 +11,6 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../src/drizzle/migrations";
 import { eventsTable } from "../src/db/schema";
-import { et } from "date-fns/locale";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,8 +65,20 @@ export default function RootLayout() {
   }, [success]);
 
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
+    "Rubik-Black": require("../assets/fonts/Rubik-Black.ttf"),
+    "Rubik-BlackItalic": require("../assets/fonts/Rubik-BlackItalic.ttf"),
+    "Rubik-Bold": require("../assets/fonts/Rubik-Bold.ttf"),
+    "Rubik-BoldItalic": require("../assets/fonts/Rubik-BoldItalic.ttf"),
+    "Rubik-ExtraBold": require("../assets/fonts/Rubik-ExtraBold.ttf"),
+    "Rubik-ExtraBoldItalic": require("../assets/fonts/Rubik-ExtraBoldItalic.ttf"),
+    "Rubik-Italic": require("../assets/fonts/Rubik-Italic.ttf"),
+    "Rubik-Light": require("../assets/fonts/Rubik-Light.ttf"),
+    "Rubik-LightItalic": require("../assets/fonts/Rubik-LightItalic.ttf"),
+    "Rubik-Medium": require("../assets/fonts/Rubik-Medium.ttf"),
+    "Rubik-MediumItalic": require("../assets/fonts/Rubik-MediumItalic.ttf"),
+    "Rubik-Regular": require("../assets/fonts/Rubik-Regular.ttf"),
+    "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
+    "Rubik-SemiBoldItalic": require("../assets/fonts/Rubik-SemiBoldItalic.ttf"),
   });
 
   setDefaultOptions({
