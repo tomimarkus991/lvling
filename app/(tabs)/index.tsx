@@ -11,7 +11,7 @@ import {
 } from "date-fns";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { DynamicHeader } from "../../components/ScrollHeader";
+import { DynamicHeader } from "../../src/components/ScrollHeader";
 import clsx from "clsx";
 
 // https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
