@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import "../global.css";
+import { setDefaultOptions } from "date-fns";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -18,6 +19,10 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
+  });
+
+  setDefaultOptions({
+    weekStartsOn: 1,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
