@@ -1,6 +1,8 @@
 import { Text, View } from "react-native";
 import { P } from "./P";
 
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 interface WeekDayProps {
   text: string;
 }
@@ -11,9 +13,13 @@ const WeekDay = ({ text }: WeekDayProps) => {
 
 export const DynamicHeader = () => {
   return (
-    <View className="h-24 pt-6">
-      <P className="mb-3 ml-5 text-2xl font-semibold">March 25</P>
-      <View className="flex-[7] flex-row">
+    <View className="mb-4 h-28 pt-7">
+      <View className="flex-row justify-between mx-5 mb-3">
+
+      <P className="text-2xl font-semibold">March 25</P>
+      <AntDesign name="questioncircleo" size={24} color="white" />
+      </View>
+      <View className="flex-[7] flex-row mt-2">
         <WeekDay text="Mon" />
         <WeekDay text="Tue" />
         <WeekDay text="Wed" />
