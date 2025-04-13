@@ -1,16 +1,15 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { setDefaultOptions } from "date-fns";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import * as SQLite from "expo-sqlite";
+import React, { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import "../global.css";
-import { add, setDefaultOptions, sub } from "date-fns";
-import * as SQLite from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../src/drizzle/migrations";
-import { eventsTable } from "../src/db/schema";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -29,39 +28,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!success) return;
-    (async () => {
-      await db.delete(eventsTable);
-      await db.insert(eventsTable).values([
-        {
-          color: "#1e3a8a",
-          locked: false,
-          title: "Push",
-          start: new Date(),
-          end: add(new Date(), { hours: 2 }),
-        },
-        {
-          color: "#14532d",
-          locked: false,
-          title: "Rest",
-          start: add(new Date(), { hours: 1 }),
-          end: add(new Date(), { hours: 3 }),
-        },
-        {
-          color: "#d6470e",
-          locked: false,
-          title: "Pull",
-          start: add(new Date(), { days: 1 }),
-          end: add(new Date(), { days: 1, hours: 2 }),
-        },
-        {
-          color: "#1e3a8a",
-          locked: false,
-          title: "Push2",
-          start: sub(new Date(), { months: 2 }),
-          end: add(sub(new Date(), { months: 2 }), { hours: 2 }),
-        },
-      ]);
-    })();
+    (async () => {})();
   }, [success]);
 
   const [loaded, error] = useFonts({
@@ -106,9 +73,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <>
-      <Stack>
-        <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
-      </Stack>
+      <GestureHandlerRootView>
+        <Stack>
+          <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>
     </>
   );
 }

@@ -10,6 +10,7 @@ module.exports = {
         // background: "#1E1F1F",
         background: "#151514",
         text: "#E5E5E7",
+        modal: "#222221",
       },
     },
   },
