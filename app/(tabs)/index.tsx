@@ -135,13 +135,21 @@ export default function TabOneScreen() {
 
               const weekEvents = events.filter(event => isSameWeek(event.start, weekStartDate));
 
+              let heightModifier = 48;
+
+              if (getMaxNumberOfEventsForWeekDay({ daysForWeek, weekEvents }) >= 8) {
+                heightModifier = 72;
+              }
+
               return (
                 <View
                   id="week"
                   key={weekStartDate.toISOString()}
                   className={clsx("flex-[7] flex-row border-b-2 border-[#222222] mb-4")}
                   style={{
-                    height: 48 + getMaxNumberOfEventsForWeekDay({ daysForWeek, weekEvents }) * 19,
+                    height:
+                      heightModifier +
+                      getMaxNumberOfEventsForWeekDay({ daysForWeek, weekEvents }) * 19,
                   }}
                 >
                   {daysForWeek.map(day => {

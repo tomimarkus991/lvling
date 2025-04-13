@@ -12,7 +12,7 @@ export const CalendarEvent = ({ id, color, title, onPress }: Props) => {
     <Pressable
       onPress={onPress}
       key={id}
-      className={clsx("px-2 rounded-md mb-1 justify-center items-center")}
+      className={clsx("px-[0.3rem] rounded-md mb-1 justify-center items-center")}
       style={{ backgroundColor: color }}
       android_ripple={{ color: "transparent" }}
     >
