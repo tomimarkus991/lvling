@@ -23,7 +23,7 @@ export const generateData = async (month: number, year: number) => {
   const allEvents: CreateEvent[] = [];
 
   for (const day of days) {
-    const numEvents = randInt(1, 8);
+    const numEvents = randInt(1, 6);
     for (let i = 0; i < numEvents; i++) {
       const eventType = eventTypes[randInt(0, eventTypes.length - 1)];
 
@@ -44,6 +44,8 @@ export const generateData = async (month: number, year: number) => {
       });
     }
   }
+
+  console.log(allEvents);
 
   await db.insert(eventsTable).values(allEvents);
 };

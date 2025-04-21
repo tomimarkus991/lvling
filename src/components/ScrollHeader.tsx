@@ -29,7 +29,7 @@ export const DynamicHeader = ({ month }: Props) => {
             console.log("Generating data");
 
             // await db.delete(eventsTable);
-            // await generateData(3, 2025);
+            // await generateData(2, 2025);
             // await generateData(4, 2025);
             // await generateData(5, 2025);
             // await generateData(6, 2025);

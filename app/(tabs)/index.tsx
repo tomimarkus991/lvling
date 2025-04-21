@@ -49,6 +49,20 @@ export default function TabOneScreen() {
 
   const [currentMonth, setCurrentMonth] = useState(currentDate);
 
+  const [firstDayOfCalendarMonth, setFirstDayOfCalendarMonth] = useState(
+    startOfWeek(startOfMonth(currentMonth))
+  );
+  const [lastDayOfCalendarMonth, setLastDayOfCalendarMonth] = useState(
+    endOfWeek(endOfMonth(currentMonth))
+  );
+
+  const [weeksStartDates, setWeeksStartDates] = useState(
+    eachWeekOfInterval({
+      start: firstDayOfCalendarMonth,
+      end: lastDayOfCalendarMonth,
+    })
+  );
+
   const swipeGesture = useSharedValue<SwipeGesture>({
     beginX: 0,
     endX: 0,
@@ -61,11 +75,9 @@ export default function TabOneScreen() {
 
   const panGesture = Gesture.Pan()
     .onBegin(e => {
-      console.log("begin", e);
       swipeGesture.value.beginX = e.absoluteX;
     })
     .onEnd(e => {
-      console.log("end", e);
       swipeGesture.value.endX = e.absoluteX;
 
       // so user didn't actually want to scroll
@@ -81,14 +93,6 @@ export default function TabOneScreen() {
         console.log(swipeGesture.value.swipeDirection);
       }
     });
-
-  const firstDayOfCalendarMonth = startOfWeek(startOfMonth(currentMonth));
-  const lastDayOfCalendarMonth = endOfWeek(endOfMonth(currentMonth));
-
-  const weeksStartDates = eachWeekOfInterval({
-    start: firstDayOfCalendarMonth,
-    end: lastDayOfCalendarMonth,
-  });
 
   const [events, setEvents] = useState<SelectEvent[]>([]);
 
@@ -121,6 +125,39 @@ export default function TabOneScreen() {
     }
   }, [swipeInfo]);
 
+  useEffect(() => {
+    const firstDayOfCalendarMonthVar = startOfWeek(startOfMonth(currentMonth));
+    const lastDayOfCalendarMonthVar = endOfWeek(endOfMonth(currentMonth));
+
+    setWeeksStartDates(
+      eachWeekOfInterval({
+        start: firstDayOfCalendarMonthVar,
+        end: lastDayOfCalendarMonthVar,
+      })
+    );
+
+    setFirstDayOfCalendarMonth(firstDayOfCalendarMonthVar);
+    setLastDayOfCalendarMonth(lastDayOfCalendarMonthVar);
+  }, [currentMonth]);
+
+  useEffect(() => {
+    const getEvents = async () => {
+      const events = await db
+        .select()
+        .from(eventsTable)
+        .where(
+          and(
+            gte(eventsTable.start, firstDayOfCalendarMonth),
+            lte(eventsTable.end, lastDayOfCalendarMonth)
+          )
+        );
+
+      setEvents(events);
+    };
+
+    getEvents();
+  }, [firstDayOfCalendarMonth, lastDayOfCalendarMonth]);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
@@ -137,19 +174,23 @@ export default function TabOneScreen() {
 
               let heightModifier = 48;
 
-              if (getMaxNumberOfEventsForWeekDay({ daysForWeek, weekEvents }) >= 8) {
-                heightModifier = 72;
-              }
+              const maxNumberOfEventsForWeekDay = getMaxNumberOfEventsForWeekDay({
+                daysForWeek,
+                weekEvents,
+              });
 
+              if (maxNumberOfEventsForWeekDay >= 7) {
+                heightModifier = 72;
+              } else if (maxNumberOfEventsForWeekDay === 6) {
+                heightModifier = 60;
+              }
               return (
                 <View
                   id="week"
                   key={weekStartDate.toISOString()}
                   className={clsx("flex-[7] flex-row border-b-2 border-[#222222] mb-4")}
                   style={{
-                    height:
-                      heightModifier +
-                      getMaxNumberOfEventsForWeekDay({ daysForWeek, weekEvents }) * 19,
+                    height: heightModifier + maxNumberOfEventsForWeekDay * 19,
                   }}
                 >
                   {daysForWeek.map(day => {
