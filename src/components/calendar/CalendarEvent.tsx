@@ -1,7 +1,7 @@
 import { GestureResponderEvent, Pressable } from "react-native";
-import { SelectEvent } from "../db/types";
+import { SelectEvent } from "../../db/types";
 import { clsx } from "clsx";
-import { P } from "./P";
+import { P } from "../P";
 
 interface Props extends SelectEvent {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
