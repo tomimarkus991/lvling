@@ -1,20 +1,29 @@
 import clsx from "clsx";
-import { isToday, isSameMonth, formatDate } from "date-fns";
-import { View } from "react-native";
+import { formatDate, isSameMonth, isToday } from "date-fns";
+import React from "react";
+import { Pressable } from "react-native";
+import { SelectEvent } from "../../db/types";
+import { useModal } from "../../hooks/ModalContext";
 import { P } from "../P";
 import { CalendarEvent } from "./CalendarEvent";
-import { SelectEvent } from "../../db/types";
 
 interface Props {
   eventsForDay: SelectEvent[];
   day: Date;
   setSelectedEvent: (event: SelectEvent) => void;
-  setModalVisible: (value: boolean) => void;
 }
 
-export const CalendarDay = ({ day, eventsForDay, setModalVisible, setSelectedEvent }: Props) => {
+export const CalendarDay = ({ day, eventsForDay, setSelectedEvent }: Props) => {
+  const { setIsEditEventModalVisible, setIsCreateEventModalVisible, setSelectedDate } = useModal();
+
   return (
-    <View className="flex-1 mx-1">
+    <Pressable
+      className="flex-1 pt-4 mx-1"
+      onPress={() => {
+        setSelectedDate(day);
+        setIsCreateEventModalVisible(true);
+      }}
+    >
       <P
         className={clsx(
           "text-center mb-1",
@@ -31,12 +40,12 @@ export const CalendarDay = ({ day, eventsForDay, setModalVisible, setSelectedEve
             key={event.id}
             onPress={() => {
               setSelectedEvent(event);
-              setModalVisible(true);
+              setIsEditEventModalVisible(true);
             }}
             {...event}
           />
         );
       })}
-    </View>
+    </Pressable>
   );
 };

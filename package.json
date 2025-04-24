@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "dev": "expo run:android",
+    "dev": "expo start",
     "android": "expo run:android",
     "android:clean": "npx expo prebuild --platform android && npx expo run:android",
     "ios": "expo run:ios",
@@ -23,6 +23,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "dayjs": "^1.11.13",
     "drizzle-orm": "^0.41.0",
     "expo": "~52.0.38",
@@ -40,13 +41,13 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "~0.77.1",
+    "react-native-gesture-handler": "~2.22.0",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "~5.1.0",
     "react-native-screens": "~4.8.0",
     "react-native-web": "~0.19.13",
-    "tailwindcss": "^3.4.17",
-    "react-native-gesture-handler": "~2.22.0",
-    "react-native-webview": "~13.13.1"
+    "react-native-webview": "~13.13.1",
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

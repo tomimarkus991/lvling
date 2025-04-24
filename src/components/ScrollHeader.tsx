@@ -21,18 +21,15 @@ interface Props {
 
 export const DynamicHeader = ({ month }: Props) => {
   return (
-    <View className="mb-4 h-28 pt-7">
+    <View className="h-28 pt-7">
       <View className="flex-row justify-between mx-5 mb-3">
         <P className="text-2xl font-semibold">{format(month, "MMMM yy")}</P>
         <Pressable
           onPress={async () => {
             console.log("Generating data");
 
-            // await db.delete(eventsTable);
-            // await generateData(2, 2025);
-            // await generateData(4, 2025);
-            // await generateData(5, 2025);
-            // await generateData(6, 2025);
+            // await db.delete(eventsTable).all();
+            await generateData(4, 2025);
           }}
         >
           <AntDesign name="questioncircleo" size={24} color="white" />

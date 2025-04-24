@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { db } from "../../app/_layout";
 import { eventsTable } from "../db/schema";
 import { SelectEvent } from "../db/types";
+import { useEvent } from "./EventContext";
 
 interface Props {
   currentMonth: Date;
@@ -35,7 +36,6 @@ interface Props {
     start: Date;
     end: Date;
   };
-  setEvents: React.Dispatch<React.SetStateAction<SelectEvent[]>>;
 }
 
 export const useGetCurrentMonth = ({
@@ -43,8 +43,9 @@ export const useGetCurrentMonth = ({
   setWeekStartDates,
   setCalendarMonthInfo,
   calendarMonthInfo,
-  setEvents,
 }: Props) => {
+  const { setEvents } = useEvent();
+
   useEffect(() => {
     const firstDayOfCalendarMonth = startOfWeek(startOfMonth(currentMonth));
     const lastDayOfCalendarMonth = endOfWeek(endOfMonth(currentMonth));
@@ -68,8 +69,8 @@ export const useGetCurrentMonth = ({
         .from(eventsTable)
         .where(
           and(
-            gte(eventsTable.start, calendarMonthInfo.start),
-            lte(eventsTable.end, calendarMonthInfo.end)
+            gte(eventsTable.start, calendarMonthInfo.start.toISOString()),
+            lte(eventsTable.end, calendarMonthInfo.end.toISOString())
           )
         );
 

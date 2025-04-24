@@ -22,9 +22,3 @@ export const getMaxNumberOfEventsForWeekDay = ({ daysForWeek, eventsThisWeek }: 
 
   return maxNumberOfEventsForWeekDay;
 };
-
-export const getHeightModifier = (count: number) => {
-  if (count >= 7) return 72;
-  if (count === 6) return 60;
-  return 48;
-};

@@ -21,12 +21,15 @@ import { getSwipeMonthGesture } from "../../src/hooks/getSwipeMonthGesture";
 import { useGetCurrentMonth } from "../../src/hooks/useGetCurrentMonth";
 import { useSwipeInfo } from "../../src/hooks/useSwipeInfo";
 import { SwipeInfo } from "../../src/types";
-import { getHeightModifier, getMaxNumberOfEventsForWeekDay } from "../../src/utils/utils";
+import { getMaxNumberOfEventsForWeekDay } from "../../src/utils/utils";
+import { EditEventModal } from "../../src/components/calendar/event/EditEventModal";
+import { CreateEventModal } from "../../src/components/calendar/event/CreateEventModal";
+import { useEvent } from "../../src/hooks/EventContext";
 
 export default function TabOneScreen() {
   const [selectedEvent, setSelectedEvent] = useState<SelectEvent | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ direction: "none", id: 0 });
+  const { events } = useEvent();
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -44,15 +47,12 @@ export default function TabOneScreen() {
 
   const swipeMonthGesture = getSwipeMonthGesture({ setSwipeInfo });
 
-  const [events, setEvents] = useState<SelectEvent[]>([]);
-
   useSwipeInfo({ setCurrentMonth, swipeInfo });
   useGetCurrentMonth({
     currentMonth,
     setWeekStartDates,
     setCalendarMonthInfo,
     calendarMonthInfo,
-    setEvents,
   });
 
   return (
@@ -78,9 +78,9 @@ export default function TabOneScreen() {
                 <View
                   id="week"
                   key={weekStartDate.toISOString()}
-                  className={clsx("flex-[7] flex-row border-b-2 border-[#222222] mb-4")}
+                  className={clsx("flex-[7] flex-row border-b-2 border-[#222222]")}
                   style={{
-                    height: getHeightModifier(maxEventsPerDay) + maxEventsPerDay * 19,
+                    height: 48 + maxEventsPerDay * 24.5,
                   }}
                 >
                   {daysForWeek.map(day => {
@@ -93,7 +93,6 @@ export default function TabOneScreen() {
                         key={day.toISOString()}
                         day={day}
                         eventsForDay={eventsForDay}
-                        setModalVisible={setModalVisible}
                         setSelectedEvent={setSelectedEvent}
                       />
                     );
@@ -101,18 +100,8 @@ export default function TabOneScreen() {
                 </View>
               );
             })}
-
-            <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} transparent>
-              <Pressable
-                onPress={() => setModalVisible(false)}
-                className="absolute top-0 left-0 w-full h-full bg-neutral-950 opacity-80"
-              />
-              <View className="items-center justify-center p-5 mx-5 mt-auto mb-auto rounded-md bg-modal">
-                <P>{selectedEvent?.title}</P>
-                <P>{selectedEvent?.id}</P>
-                <Button title="Close" onPress={() => setModalVisible(false)} />
-              </View>
-            </Modal>
+            <EditEventModal selectedEvent={selectedEvent} />
+            <CreateEventModal />
           </ScrollView>
         </GestureDetector>
       </SafeAreaView>

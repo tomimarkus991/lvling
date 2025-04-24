@@ -16,6 +16,7 @@ const eventTypes = [
 ];
 
 export const generateData = async (month: number, year: number) => {
+  // await db.delete(eventsTable).all();
   const startDate = startOfMonth(new Date(year, month - 1));
   const endDate = endOfMonth(startDate);
   const days = eachDayOfInterval({ start: startDate, end: endDate });
@@ -28,19 +29,21 @@ export const generateData = async (month: number, year: number) => {
       const eventType = eventTypes[randInt(0, eventTypes.length - 1)];
 
       // Random start hour between 6am and 10pm (22)
-      const startHour = randInt(6, 20);
-      const startMinute = randInt(0, 1) * 30; // 0 or 30 minutes
-      const duration = randInt(1, 2); // 1–2 hour duration
+      const startHour = randInt(6, 20); // between 6:00 and 20:00
+      const startMinute = randInt(0, 1) * 30; // either 0 or 30 minutes
+      const durationHours = randInt(1, 2); // event duration: 1 or 2 hours
 
-      const start = setMinutes(setHours(new Date(day), startHour), startMinute);
-      const end = add(start, { hours: duration });
+      const start = new Date(day);
+      start.setHours(startHour, startMinute, 0, 0);
+
+      const end = add(start, { hours: durationHours });
 
       allEvents.push({
         color: eventType.color,
         locked: false,
         title: eventType.title,
-        start,
-        end,
+        start: start.toISOString(), // ensure UTC ISO format
+        end: end.toISOString(),
       });
     }
   }
@@ -48,4 +51,6 @@ export const generateData = async (month: number, year: number) => {
   console.log(allEvents);
 
   await db.insert(eventsTable).values(allEvents);
+
+  console.log("done");
 };

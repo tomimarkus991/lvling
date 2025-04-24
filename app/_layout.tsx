@@ -10,6 +10,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import "../global.css";
 import migrations from "../src/drizzle/migrations";
+import { ModalProvider } from "../src/hooks/ModalContext";
+import { presetsTable } from "../src/db/schema";
+import { EventProvider } from "../src/hooks/EventContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -28,7 +31,20 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!success) return;
-    (async () => {})();
+    (async () => {
+      const existing = await db.select().from(presetsTable).limit(1);
+
+      if (!existing) {
+        await db.insert(presetsTable).values([
+          { id: 1, title: "Push", color: "#312E81", locked: false },
+          { id: 2, title: "Pull", color: "#BE6404", locked: false },
+          { id: 3, title: "Legs", color: "#1e3a8a", locked: false },
+          { id: 4, title: "Rest", color: "#14532D", locked: false },
+          { id: 5, title: "", color: "#EAB308", locked: false },
+          { id: 6, title: "", color: "#9A0F0F", locked: false },
+        ]);
+      }
+    })();
   }, [success]);
 
   const [loaded, error] = useFonts({
@@ -74,9 +90,13 @@ function RootLayoutNav() {
   return (
     <>
       <GestureHandlerRootView>
-        <Stack>
-          <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
-        </Stack>
+        <EventProvider>
+          <ModalProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
+            </Stack>
+          </ModalProvider>
+        </EventProvider>
       </GestureHandlerRootView>
     </>
   );
