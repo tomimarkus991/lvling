@@ -13,7 +13,7 @@ interface Props {
   setSelectedEvent: (event: SelectEvent) => void;
 }
 
-export const CalendarDay = ({ day, eventsForDay, setSelectedEvent }: Props) => {
+export const CalendarDay = React.memo(({ day, eventsForDay, setSelectedEvent }: Props) => {
   const { setIsEditEventModalVisible, setIsCreateEventModalVisible, setSelectedDate } = useModal();
 
   return (
@@ -48,4 +48,4 @@ export const CalendarDay = ({ day, eventsForDay, setSelectedEvent }: Props) => {
       })}
     </Pressable>
   );
-};
+});

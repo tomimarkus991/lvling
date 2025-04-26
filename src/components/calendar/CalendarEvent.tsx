@@ -16,7 +16,15 @@ export const CalendarEvent = ({ id, color, title, onPress }: Props) => {
       style={{ backgroundColor: color }}
       android_ripple={{ color: "transparent" }}
     >
-      <P className="mt-1 text-sm" fontFamily="Rubik-Medium" numberOfLines={1} ellipsizeMode="clip">
+      <P
+        className="mt-1 text-sm"
+        fontFamily="Rubik-Medium"
+        numberOfLines={1}
+        ellipsizeMode="clip"
+        style={{
+          color: color === "#eab308" ? "#121212" : "#FFFFFF",
+        }}
+      >
         {title}
       </P>
     </Pressable>

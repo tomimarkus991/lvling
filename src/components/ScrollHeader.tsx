@@ -29,7 +29,7 @@ export const DynamicHeader = ({ month }: Props) => {
             console.log("Generating data");
 
             // await db.delete(eventsTable).all();
-            await generateData(4, 2025);
+            await generateData(1, 2025);
           }}
         >
           <AntDesign name="questioncircleo" size={24} color="white" />

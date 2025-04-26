@@ -4,6 +4,7 @@ import {
   eachWeekOfInterval,
   endOfMonth,
   endOfWeek,
+  format,
   isSameDay,
   isSameWeek,
   startOfMonth,
@@ -25,6 +26,7 @@ import { getMaxNumberOfEventsForWeekDay } from "../../src/utils/utils";
 import { EditEventModal } from "../../src/components/calendar/event/EditEventModal";
 import { CreateEventModal } from "../../src/components/calendar/event/CreateEventModal";
 import { useEvent } from "../../src/hooks/EventContext";
+import { MotiScrollView } from "moti";
 
 export default function TabOneScreen() {
   const [selectedEvent, setSelectedEvent] = useState<SelectEvent | null>(null);
@@ -60,14 +62,24 @@ export default function TabOneScreen() {
       <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
         <DynamicHeader month={currentMonth} />
         <GestureDetector gesture={swipeMonthGesture}>
-          <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <MotiScrollView
+            from={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "timing", duration: 300 }}
+            className="flex-1"
+            showsVerticalScrollIndicator={false}
+          >
             {weekStartDates.map(weekStartDate => {
               const daysForWeek = eachDayOfInterval({
                 start: startOfWeek(weekStartDate),
                 end: endOfWeek(weekStartDate),
               });
 
-              const eventsThisWeek = events.filter(event => isSameWeek(event.start, weekStartDate));
+              const eventsThisWeek = daysForWeek.flatMap(day => {
+                const dayKey = format(day, "dd-MM-yyyy");
+                return events.get(dayKey) || [];
+              });
 
               const maxEventsPerDay = getMaxNumberOfEventsForWeekDay({
                 daysForWeek,
@@ -84,9 +96,7 @@ export default function TabOneScreen() {
                   }}
                 >
                   {daysForWeek.map(day => {
-                    const eventsForDay = eventsThisWeek.filter(event =>
-                      isSameDay(event.start, day)
-                    );
+                    const eventsForDay = events.get(format(day, "dd-MM-yyyy")) || [];
 
                     return (
                       <CalendarDay
@@ -102,7 +112,7 @@ export default function TabOneScreen() {
             })}
             <EditEventModal selectedEvent={selectedEvent} />
             <CreateEventModal />
-          </ScrollView>
+          </MotiScrollView>
         </GestureDetector>
       </SafeAreaView>
     </SafeAreaProvider>

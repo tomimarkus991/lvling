@@ -1,17 +1,16 @@
-import { Modal, Pressable, TextInput, View } from "react-native";
-import { useModal } from "../../../hooks/ModalContext";
-import React, { useEffect, useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import clsx from "clsx";
+import { add, format } from "date-fns";
+import { eq } from "drizzle-orm";
+import { MotiView } from "moti";
+import React, { useEffect, useState } from "react";
+import { Modal, Pressable, TextInput, View } from "react-native";
 import { db } from "../../../../app/_layout";
 import { eventsTable, presetsTable } from "../../../db/schema";
-import { SelectPreset } from "../../../db/types";
-import { eq } from "drizzle-orm";
-import { toZonedTime } from "date-fns-tz";
-import { date } from "drizzle-orm/mysql-core";
-import { add } from "date-fns";
-import { P } from "../../P";
+import { SelectEvent, SelectPreset } from "../../../db/types";
 import { useEvent } from "../../../hooks/EventContext";
+import { useModal } from "../../../hooks/ModalContext";
+import { P } from "../../P";
 
 interface PresetInputProps {
   backgroundColor: string;
@@ -37,7 +36,7 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
       const utcStart = selectedDate.toISOString();
       const utcEnd = add(selectedDate, { hours: 2 }).toISOString();
 
-      const newEvent = await db
+      const newEvent = (await db
         .insert(eventsTable)
         .values({
           title,
@@ -46,9 +45,18 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
           end: utcEnd,
           locked: false,
         })
-        .returning();
+        .returning()) satisfies SelectEvent[];
 
-      setEvents(prevEvents => [...prevEvents, ...newEvent]);
+      setEvents(prevEvents => {
+        const newEvents = new Map(prevEvents);
+
+        const dayKey = format(newEvent[0].start, "dd-MM-yyyy");
+        const existingEvents = newEvents.get(dayKey) || [];
+
+        newEvents.set(dayKey, [...existingEvents, newEvent[0]]);
+
+        return newEvents;
+      });
 
       setIsCreateEventModalVisible(false);
     }
@@ -94,7 +102,7 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
 };
 
 export const CreateEventModal = () => {
-  const { isCreateEventModalVisible, setIsCreateEventModalVisible, selectedDate } = useModal();
+  const { isCreateEventModalVisible, setIsCreateEventModalVisible } = useModal();
 
   const [presets, setPresets] = useState<SelectPreset[]>([]);
 
@@ -106,13 +114,12 @@ export const CreateEventModal = () => {
     getPresets();
   }, []);
 
-  console.log(presets);
-
   return (
     <Modal
       visible={isCreateEventModalVisible}
       onRequestClose={() => setIsCreateEventModalVisible(false)}
       transparent
+      animationType="slide"
     >
       <Pressable
         onPress={() => setIsCreateEventModalVisible(false)}

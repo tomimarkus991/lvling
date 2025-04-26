@@ -5,6 +5,9 @@ import {
   endOfMonth,
   eachWeekOfInterval,
   EachWeekOfIntervalResult,
+  format,
+  add,
+  sub,
 } from "date-fns";
 import { and, gte, lte } from "drizzle-orm";
 import { useEffect } from "react";
@@ -62,21 +65,37 @@ export const useGetCurrentMonth = ({
     });
   }, [currentMonth]);
 
+  const groupEventsByDay = (events: SelectEvent[]) => {
+    const map = new Map<string, SelectEvent[]>();
+
+    events.forEach(event => {
+      const dayKey = format(event.start, "dd-MM-yyyy");
+      if (!map.has(dayKey)) {
+        map.set(dayKey, []);
+      }
+      map.get(dayKey)!.push(event);
+    });
+
+    return map;
+  };
+
   useEffect(() => {
-    const fetchEventsForMonth = async () => {
+    const fetchEvents = async () => {
+      const start = startOfWeek(startOfMonth(sub(currentMonth, { months: 1 })));
+      const end = endOfWeek(endOfMonth(add(currentMonth, { months: 1 })));
+
       const events = await db
         .select()
         .from(eventsTable)
         .where(
-          and(
-            gte(eventsTable.start, calendarMonthInfo.start.toISOString()),
-            lte(eventsTable.end, calendarMonthInfo.end.toISOString())
-          )
+          and(gte(eventsTable.start, start.toISOString()), lte(eventsTable.end, end.toISOString()))
         );
 
-      setEvents(events);
+      const groupedEvents = groupEventsByDay(events);
+
+      setEvents(groupedEvents);
     };
 
-    fetchEventsForMonth();
+    fetchEvents();
   }, [calendarMonthInfo]);
 };
