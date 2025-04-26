@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Animated, Pressable, Text, View } from "react-native";
 import { P } from "./P";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { db } from "../../app/_layout";
 import { eventsTable } from "../db/schema";
 import { generateData } from "../db/generateData";
+import { MotiView } from "moti";
+import { ANIMATION_DURATIONS } from "../config";
 
 interface WeekDayProps {
   text: string;
@@ -17,13 +19,16 @@ const WeekDay = ({ text }: WeekDayProps) => {
 
 interface Props {
   month: Date;
+  translateX: Animated.Value;
 }
 
-export const DynamicHeader = ({ month }: Props) => {
+export const DynamicHeader = ({ month, translateX }: Props) => {
   return (
     <View className="h-28 pt-7">
       <View className="flex-row justify-between mx-5 mb-3">
-        <P className="text-2xl font-semibold">{format(month, "MMMM yy")}</P>
+        <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
+          <P className="text-2xl font-semibold">{format(month, "MMMM yy")}</P>
+        </Animated.View>
         <Pressable
           onPress={async () => {
             console.log("Generating data");
