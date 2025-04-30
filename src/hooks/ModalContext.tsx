@@ -5,8 +5,8 @@ type ModalContextType = {
   setIsEditEventModalVisible: (visible: boolean) => void;
   isCreateEventModalVisible: boolean;
   setIsCreateEventModalVisible: (visible: boolean) => void;
-  selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  isColorPickerModalVisible: boolean;
+  setIsColorPickerModalVisible: (visible: boolean) => void;
 };
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -14,11 +14,7 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isEditEventModalVisible, setIsEditEventModalVisible] = useState(false);
   const [isCreateEventModalVisible, setIsCreateEventModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  // const [selectedDates, setSelectedDates] = useState({
-  //   start: "",
-  //   end:""
-  // })
+  const [isColorPickerModalVisible, setIsColorPickerModalVisible] = useState(false);
 
   return (
     <ModalContext.Provider
@@ -27,8 +23,8 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         setIsEditEventModalVisible,
         isCreateEventModalVisible,
         setIsCreateEventModalVisible,
-        selectedDate,
-        setSelectedDate,
+        isColorPickerModalVisible,
+        setIsColorPickerModalVisible,
       }}
     >
       {children}

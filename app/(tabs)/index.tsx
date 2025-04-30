@@ -1,19 +1,15 @@
 import { eachWeekOfInterval, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
 import { useRef, useState } from "react";
 import { Animated } from "react-native";
-import { GestureDetector, ScrollView } from "react-native-gesture-handler";
+import { GestureDetector } from "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { CalendarWeek } from "../../src/components/calendar/CalendarWeek";
-import { CreateEventModal } from "../../src/components/calendar/event/CreateEventModal";
-import { EditEventModal } from "../../src/components/calendar/event/EditEventModal";
+import { CalendarMonth } from "../../src/components/calendar/CalendarMonth";
 import { DynamicHeader } from "../../src/components/ScrollHeader";
-import { SelectEvent } from "../../src/db/types";
-import { useEvent } from "../../src/hooks/EventContext";
 import { getSwipeMonthGesture } from "../../src/hooks/getSwipeMonthGesture";
 import { useGetCurrentMonth } from "../../src/hooks/useGetCurrentMonth";
 import { useSwipeInfo } from "../../src/hooks/useSwipeInfo";
 import { SwipeInfo } from "../../src/types";
-import { CalendarMonth } from "../../src/components/calendar/CalendarMonth";
+import { ColorPicker } from "../../src/components/calendar/ColorPicker";
 
 export default function TabOneScreen() {
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ direction: "none", id: 0 });

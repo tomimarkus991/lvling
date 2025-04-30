@@ -13,6 +13,7 @@ import migrations from "../src/drizzle/migrations";
 import { ModalProvider } from "../src/hooks/ModalContext";
 import { presetsTable } from "../src/db/schema";
 import { EventProvider } from "../src/hooks/EventContext";
+import { SelectProvider } from "../src/hooks/SelectContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -92,9 +93,11 @@ function RootLayoutNav() {
       <GestureHandlerRootView>
         <EventProvider>
           <ModalProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
-            </Stack>
+            <SelectProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
+              </Stack>
+            </SelectProvider>
           </ModalProvider>
         </EventProvider>
       </GestureHandlerRootView>
