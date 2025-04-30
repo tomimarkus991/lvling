@@ -1,3 +1,3 @@
 export const ANIMATION_DURATIONS = {
-  monthSwipe: 360,
+  monthSwipe: 300,
 };

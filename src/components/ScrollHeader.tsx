@@ -20,13 +20,14 @@ const WeekDay = ({ text }: WeekDayProps) => {
 interface Props {
   month: Date;
   translateX: Animated.Value;
+  opacity: Animated.Value;
 }
 
-export const DynamicHeader = ({ month, translateX }: Props) => {
+export const DynamicHeader = ({ month, translateX, opacity }: Props) => {
   return (
     <View className="h-28 pt-7">
       <View className="flex-row justify-between mx-5 mb-3">
-        <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
+        <Animated.View style={{ flex: 1, transform: [{ translateX }], opacity }}>
           <P className="text-2xl font-semibold">{format(month, "MMMM yy")}</P>
         </Animated.View>
         <Pressable
