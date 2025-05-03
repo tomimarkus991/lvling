@@ -5,6 +5,7 @@ import { EditEventModal } from "./event/EditEventModal";
 import React, { useState } from "react";
 import { SelectEvent } from "../../db/types";
 import { useEvent } from "../../hooks/EventContext";
+import { RestModal } from "./modals/RestModal";
 
 interface Props {
   weekStartDates: Date[];
@@ -26,6 +27,7 @@ export const CalendarMonth = React.memo(({ weekStartDates }: Props) => {
       })}
       <EditEventModal selectedEvent={selectedEvent} />
       <CreateEventModal />
+      <RestModal />
     </ScrollView>
   );
 });

@@ -7,6 +7,8 @@ type ModalContextType = {
   setIsCreateEventModalVisible: (visible: boolean) => void;
   isColorPickerModalVisible: boolean;
   setIsColorPickerModalVisible: (visible: boolean) => void;
+  isRestModalVisible: boolean;
+  setIsRestModalVisible: (visible: boolean) => void;
 };
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -15,10 +17,13 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isEditEventModalVisible, setIsEditEventModalVisible] = useState(false);
   const [isCreateEventModalVisible, setIsCreateEventModalVisible] = useState(false);
   const [isColorPickerModalVisible, setIsColorPickerModalVisible] = useState(false);
+  const [isRestModalVisible, setIsRestModalVisible] = useState(false);
 
   return (
     <ModalContext.Provider
       value={{
+        isRestModalVisible,
+        setIsRestModalVisible,
         isEditEventModalVisible,
         setIsEditEventModalVisible,
         isCreateEventModalVisible,
