@@ -11,7 +11,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "doctor": "npx expo-doctor",
-    "drizzle": "npx drizzle-kit generate"
+    "drizzle": "npx drizzle-kit generate",
+    "impulse:preview": "eas build --profile preview --platform android"
   },
   "jest": {
     "preset": "jest-expo"
