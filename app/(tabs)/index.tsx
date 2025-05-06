@@ -1,21 +1,27 @@
 import { eachWeekOfInterval, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
-import { useRef, useState } from "react";
-import { Animated } from "react-native";
-import { GestureDetector } from "react-native-gesture-handler";
+import React, { useRef, useState } from "react";
+import { Animated, ScrollView } from "react-native";
+import { Gesture, GestureDetector, GestureType } from "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { CalendarMonth } from "../../src/components/calendar/CalendarMonth";
+import { CalendarWeek } from "../../src/components/calendar/CalendarWeek";
+import { CreateEventModal } from "../../src/components/calendar/event/CreateEventModal";
+import { EditEventModal } from "../../src/components/calendar/event/EditEventModal";
+import { RestModal } from "../../src/components/calendar/modals/RestModal";
 import { DynamicHeader } from "../../src/components/ScrollHeader";
+import { SelectEvent } from "../../src/db/types";
+import { useEvent } from "../../src/hooks/EventContext";
 import { getSwipeMonthGesture } from "../../src/hooks/getSwipeMonthGesture";
 import { useGetCurrentMonth } from "../../src/hooks/useGetCurrentMonth";
 import { useSwipeInfo } from "../../src/hooks/useSwipeInfo";
 import { SwipeInfo } from "../../src/types";
-import { ColorPicker } from "../../src/components/calendar/ColorPicker";
 
 export default function TabOneScreen() {
   const [swipeInfo, setSwipeInfo] = useState<SwipeInfo>({ direction: "none", id: 0 });
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
-
+  const panGestureRef = useRef<GestureType>(Gesture.Pan());
+  const [selectedEvent, setSelectedEvent] = useState<SelectEvent | null>(null);
+  const { events } = useEvent();
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const [calendarMonthInfo, setCalendarMonthInfo] = useState({
@@ -30,7 +36,7 @@ export default function TabOneScreen() {
     })
   );
 
-  const swipeMonthGesture = getSwipeMonthGesture({ setSwipeInfo });
+  const swipeMonthGesture = getSwipeMonthGesture({ setSwipeInfo, panGestureRef });
 
   useSwipeInfo({ setCurrentMonth, swipeInfo, translateX, opacity });
   useGetCurrentMonth({
@@ -44,11 +50,25 @@ export default function TabOneScreen() {
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
         <DynamicHeader month={currentMonth} translateX={translateX} opacity={opacity} />
-        <GestureDetector gesture={swipeMonthGesture}>
-          <Animated.View style={{ flex: 1, transform: [{ translateX }], opacity }}>
-            <CalendarMonth weekStartDates={weekStartDates} />
-          </Animated.View>
-        </GestureDetector>
+        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <GestureDetector gesture={swipeMonthGesture}>
+            <Animated.View style={{ flex: 1, transform: [{ translateX }], opacity }}>
+              {weekStartDates.map(weekStartDate => {
+                return (
+                  <CalendarWeek
+                    events={events}
+                    setSelectedEvent={setSelectedEvent}
+                    weekStartDate={weekStartDate}
+                    key={weekStartDate.toISOString()}
+                  />
+                );
+              })}
+            </Animated.View>
+          </GestureDetector>
+          <EditEventModal selectedEvent={selectedEvent} />
+          <CreateEventModal />
+          <RestModal />
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
