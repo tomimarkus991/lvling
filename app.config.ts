@@ -18,8 +18,8 @@ const getAppConfig = (): AppConfig => {
   if (variant === "development") {
     return {
       name: `${config.name} Dev`,
-      scheme: `${config.scheme}-dev-test-b`,
-      package: `${config.package}.dev.test.b`,
+      scheme: `${config.scheme}-dev`,
+      package: `${config.package}.dev`,
     };
   } else if (variant === "preview") {
     return {
