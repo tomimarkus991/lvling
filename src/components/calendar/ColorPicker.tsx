@@ -2,16 +2,28 @@ import { Modal, Pressable, View } from "react-native";
 import { colors } from "../../config";
 import { useModal } from "../../hooks/ModalContext";
 import { useSelect } from "../../hooks/SelectContext";
+import { eq } from "drizzle-orm";
+import { db } from "../../../app/_layout";
+import { eventsTable } from "../../db/schema";
 
-interface Props {}
-export const ColorPicker = ({}: Props) => {
+interface Props {
+  id?: number;
+}
+
+export const ColorPicker = ({ id }: Props) => {
   const { isColorPickerModalVisible, setIsColorPickerModalVisible } = useModal();
-  const { setSelectedColor, setSelectedPreset, selectedPreset, setCustomEventSelectedColor } =
-    useSelect();
+  const {
+    setSelectedColor,
+    setSelectedPreset,
+    selectedPreset,
+    setCustomEventSelectedColor,
+    setEditModalSelectedColor,
+  } = useSelect();
 
   const closeModal = () => {
     setSelectedPreset(null);
     setIsColorPickerModalVisible(false);
+    setEditModalSelectedColor(null);
   };
   return (
     <Modal
@@ -30,16 +42,26 @@ export const ColorPicker = ({}: Props) => {
             return (
               <Pressable
                 key={color}
-                className="mx-auto bg-red-500 rounded-full size-10"
+                className="mx-auto rounded-full size-10"
                 style={{ backgroundColor: color }}
-                onPress={() => {
-                  console.log(selectedPreset);
+                onPress={async () => {
+                  if (id) {
+                    setEditModalSelectedColor(color);
 
-                  if (selectedPreset) {
-                    setSelectedColor(color);
+                    await db
+                      .update(eventsTable)
+                      .set({
+                        color,
+                      })
+                      .where(eq(eventsTable.id, id));
                   } else {
-                    setCustomEventSelectedColor(color);
+                    if (selectedPreset) {
+                      setSelectedColor(color);
+                    } else {
+                      setCustomEventSelectedColor(color);
+                    }
                   }
+
                   setIsColorPickerModalVisible(false);
                 }}
               />

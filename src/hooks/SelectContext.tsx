@@ -9,6 +9,8 @@ type ModalContextType = {
   setSelectedColor: React.Dispatch<React.SetStateAction<string | null>>;
   customEventSelectedColor: string | null;
   setCustomEventSelectedColor: React.Dispatch<React.SetStateAction<string | null>>;
+  editModalSelectedColor: string | null;
+  setEditModalSelectedColor: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const Context = createContext<ModalContextType | undefined>(undefined);
@@ -18,6 +20,7 @@ export const SelectProvider = ({ children }: { children: ReactNode }) => {
   const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [customEventSelectedColor, setCustomEventSelectedColor] = useState<string | null>(null);
+  const [editModalSelectedColor, setEditModalSelectedColor] = useState<string | null>(null);
 
   // const [selectedDates, setSelectedDates] = useState({
   //   start: "",
@@ -35,6 +38,8 @@ export const SelectProvider = ({ children }: { children: ReactNode }) => {
         setSelectedPreset,
         customEventSelectedColor,
         setCustomEventSelectedColor,
+        editModalSelectedColor,
+        setEditModalSelectedColor,
       }}
     >
       {children}
