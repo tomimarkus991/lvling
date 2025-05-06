@@ -1,12 +1,47 @@
-import { ExpoConfig } from "@expo/config";
+import { ConfigContext, ExpoConfig } from "@expo/config";
 
-const config: ExpoConfig = {
-  name: "impulse",
+type AppConfig = {
+  name: string;
+  scheme: string;
+  package: string;
+};
+
+const getAppConfig = (): AppConfig => {
+  const variant = process.env.EXPO_PUBLIC_APP_VARIANT ?? "production";
+
+  const config: AppConfig = {
+    name: "impulse",
+    package: "com.tomimarkus991.impulse",
+    scheme: "project-impulse",
+  };
+
+  if (variant === "development") {
+    return {
+      name: `${config.name} Dev`,
+      scheme: `${config.scheme}-dev`,
+      package: `${config.package}.dev`,
+    };
+  } else if (variant === "preview") {
+    return {
+      name: `${config.name}`,
+      scheme: `${config.scheme}-preview`,
+      package: `${config.package}.preview`,
+    };
+  }
+
+  return config;
+};
+
+const appConfig = getAppConfig();
+
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  ...config,
+  name: appConfig.name,
   slug: "impulse",
   version: "1.0.0",
-  orientation: "portrait",
+  orientation: "default",
   icon: "./assets/images/icon.png",
-  scheme: "project-impulse",
+  scheme: appConfig.scheme,
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   splash: {
@@ -16,13 +51,17 @@ const config: ExpoConfig = {
   },
   ios: {
     supportsTablet: true,
+    config: {
+      usesNonExemptEncryption: false,
+    },
+    bundleIdentifier: appConfig.package,
   },
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/images/splash.png",
       backgroundColor: "#1e1f1f",
     },
-    package: "com.tomimarkus991.impulse",
+    package: appConfig.package,
   },
   plugins: [
     "expo-router",
@@ -52,6 +91,4 @@ const config: ExpoConfig = {
   experiments: {
     typedRoutes: true,
   },
-};
-
-export default config;
+});
