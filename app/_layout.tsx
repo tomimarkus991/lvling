@@ -5,7 +5,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SQLite from "expo-sqlite";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import "../global.css";
@@ -29,13 +29,15 @@ export const db = drizzle(expo);
 
 export default function RootLayout() {
   const { success } = useMigrations(db, migrations);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     if (!success) return;
+
     (async () => {
       const existing = await db.select().from(presetsTable).limit(1);
 
-      if (!existing) {
+      if (existing.length === 0) {
         await db.insert(presetsTable).values([
           { id: 1, title: "Push", color: "#312E81", locked: false },
           { id: 2, title: "Pull", color: "#BE6404", locked: false },
@@ -45,6 +47,7 @@ export default function RootLayout() {
           { id: 6, title: "", color: "#9A0F0F", locked: false },
         ]);
       }
+      setInitialized(true);
     })();
   }, [success]);
 
@@ -83,6 +86,8 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
+  if (!initialized) return null;
 
   return <RootLayoutNav />;
 }
