@@ -23,7 +23,7 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const expo = SQLite.openDatabaseSync("../src/db/db.db");
+const expo = SQLite.openDatabaseSync("db.db");
 
 export const db = drizzle(expo);
 
