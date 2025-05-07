@@ -1,14 +1,13 @@
-import clsx from "clsx";
 import { formatDate, isSameMonth, isToday } from "date-fns";
 import React from "react";
-import { Pressable, View } from "react-native";
-import { SelectEvent } from "../../db/types";
-import { useModal } from "../../hooks/ModalContext";
-import { P } from "../P";
-import { CalendarEvent } from "./CalendarEvent";
-import { useSelect } from "../../hooks/SelectContext";
+import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
+import { SelectEvent } from "../../db/types";
+import { useModal } from "../../hooks/ModalContext";
+import { useSelect } from "../../hooks/SelectContext";
+import { P } from "../P";
+import { CalendarEvent } from "./CalendarEvent";
 
 interface Props {
   eventsForDay: SelectEvent[];
@@ -40,16 +39,18 @@ export const CalendarDay = React.memo(({ day, eventsForDay, setSelectedEvent }: 
       runOnJS(doubleTapAction)();
     });
 
+  console.log(isToday(day));
+
   return (
     <GestureDetector gesture={Gesture.Exclusive(doubleTap, singleTap)}>
       <View className="flex-1 pt-4 mx-1">
         <P
-          className={clsx(
-            "text-center mb-1",
-            isToday(day)
-              ? "text-primary"
-              : `${isSameMonth(new Date(), day) ? "text-text" : "text-[#575757]"}`
-          )}
+          className={"text-center mb-1"}
+          style={{
+            color: isToday(day)
+              ? "#0A84FF"
+              : `${isSameMonth(new Date(), day) ? "#E5E5E7" : "#575757"}`,
+          }}
         >
           {formatDate(day, "dd")}
         </P>
