@@ -39,8 +39,6 @@ export const CalendarDay = React.memo(({ day, eventsForDay, setSelectedEvent }: 
       runOnJS(doubleTapAction)();
     });
 
-  console.log(isToday(day));
-
   return (
     <GestureDetector gesture={Gesture.Exclusive(doubleTap, singleTap)}>
       <View className="flex-1 pt-4 mx-1">

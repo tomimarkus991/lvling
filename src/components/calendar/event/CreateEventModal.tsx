@@ -79,11 +79,16 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
   }, [selectedColor]);
 
   const createEvent = async () => {
+    if (!text) {
+      Alert.alert("Preset needs title");
+      return;
+    }
+
     const newEvent = (await createDBEvent({
       isEditing,
       backgroundColor,
       selectedDate,
-      title,
+      title: text,
     })) as SelectEvent[];
 
     setEvents(prevEvents => {
@@ -110,22 +115,30 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
   };
 
   return (
-    <View className="border-[3px] border-white flex-row rounded-xl">
+    <View className="border-[3px] border-white flex-row items-center rounded-xl h-14">
       <Pressable
-        className="w-[63%] p-3"
-        onLongPress={() => setIsEditing(true)}
+        className="flex-1 pl-3 pr-2"
+        onLongPress={() => {
+          setIsEditing(true);
+        }}
         onPress={createEvent}
       >
         <TextInput
-          className="w-[63%] text-white ml-2"
-          autoCapitalize="words"
-          style={{ fontFamily: "Rubik-Medium" }}
+          className="h-full p-0 text-lg text-white"
+          style={{
+            fontFamily: "Rubik-Medium",
+            textAlignVertical: "center",
+            includeFontPadding: false,
+          }}
           cursorColor="#fff"
           value={text}
           onChangeText={setText}
           editable={isEditing}
           onSubmitEditing={handleEventNameInputChange}
           onBlur={handleEventNameInputChange}
+          numberOfLines={1}
+          multiline={false}
+          scrollEnabled={false}
         />
       </Pressable>
 
@@ -134,7 +147,7 @@ const PresetInput = ({ backgroundColor, id, title }: PresetInputProps) => {
           setIsColorPickerModalVisible(true);
           setSelectedPreset(id);
         }}
-        className={clsx("m-2 rounded-full size-7")}
+        className={clsx("mr-3 rounded-full size-7")}
         style={{ backgroundColor }}
       />
     </View>
@@ -234,12 +247,13 @@ export const CreateEventModal = () => {
             className="w-[65%] text-white ml-2"
             placeholder="Title"
             placeholderTextColor="#9e9e9e"
-            autoCapitalize="words"
             style={{ fontFamily: "Rubik-Medium" }}
             cursorColor="#fff"
             value={title}
             onChangeText={setTitle}
             onSubmitEditing={createEvent}
+            numberOfLines={1}
+            multiline={false}
           />
           <FontAwesome name="unlock-alt" size={24} color="white" className="p-2 ml-4 mr-2" />
           <Pressable
