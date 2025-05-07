@@ -56,10 +56,11 @@ export default function TabOneScreen() {
               {weekStartDates.map(weekStartDate => {
                 return (
                   <CalendarWeek
+                    key={weekStartDate.toISOString()}
                     events={events}
                     setSelectedEvent={setSelectedEvent}
                     weekStartDate={weekStartDate}
-                    key={weekStartDate.toISOString()}
+                    currentMonth={currentMonth}
                   />
                 );
               })}
