@@ -48,10 +48,10 @@ export default function TabOneScreen() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-        <DynamicHeader month={currentMonth} translateX={translateX} opacity={opacity} />
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <GestureDetector gesture={swipeMonthGesture}>
+      <GestureDetector gesture={swipeMonthGesture}>
+        <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+          <DynamicHeader month={currentMonth} translateX={translateX} opacity={opacity} />
+          <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
             <Animated.View style={{ flex: 1, transform: [{ translateX }], opacity }}>
               {weekStartDates.map(weekStartDate => {
                 return (
@@ -65,12 +65,12 @@ export default function TabOneScreen() {
                 );
               })}
             </Animated.View>
-          </GestureDetector>
-          <EditEventModal selectedEvent={selectedEvent} />
-          <CreateEventModal />
-          <RestModal />
-        </ScrollView>
-      </SafeAreaView>
+            <EditEventModal selectedEvent={selectedEvent} />
+            <CreateEventModal />
+            <RestModal />
+          </ScrollView>
+        </SafeAreaView>
+      </GestureDetector>
     </SafeAreaProvider>
   );
 }
