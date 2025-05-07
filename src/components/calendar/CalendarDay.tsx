@@ -41,7 +41,7 @@ export const CalendarDay = React.memo(({ day, eventsForDay, setSelectedEvent }: 
 
   return (
     <GestureDetector gesture={Gesture.Exclusive(doubleTap, singleTap)}>
-      <View className="flex-1 pt-4 mx-1">
+      <View className="flex-1 pt-6 pb-12 mx-1">
         <P
           className={"text-center mb-1"}
           style={{
